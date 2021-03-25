@@ -52,7 +52,7 @@ Task 3
   considering the input of our problem, which is the rows of our records.
 
 -- All in all, Line 106 is O(n), Line 107 is O(n) and Line 108 is O(n log n) as it uses timsort
-   in its backend. Complete complexity is O(n logn).
+   in its backend [1]. Complete complexity is O(n logn).
 
 
 
@@ -65,3 +65,9 @@ Task 4
   constant, i.e irrelevant for the input. 
 
 - All in all, the complexity is O(n**2), which is bad.
+
+
+
+References
+------------
+[1]: https://stackoverflow.com/questions/14434490/what-is-the-complexity-of-the-sorted-function

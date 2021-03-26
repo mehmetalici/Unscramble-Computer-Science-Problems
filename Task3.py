@@ -74,7 +74,7 @@ def get_prefix_type(number: str):
   if ' ' in number and int(number[0]) in [7, 8, 9]:  
     return PrefixTypes.MOBILE
 
-  if number[:3] == TELEMARKET_PREFIX:  
+  if int(number[:3]) == TELEMARKET_PREFIX:  
     return PrefixTypes.TELEMARKET
 
   raise UndefinedPrefixException
@@ -102,10 +102,27 @@ def get_mobile_prefix(number: str):
   if type == PrefixTypes.TELEMARKET:
     return TELEMARKET_PREFIX  
 
+def get_indices_of_same_type(col: list, indices: list, prefix_type):
+  return [idx for idx in indices if get_prefix_type(col[idx]) == prefix_type]
 
+
+def calc_same_type_percentage(record: list, prefix_type: PrefixTypes):
+  xer_col, xee_col = [get_column(record, col_idx=i) for i in range(2)]
+  xer_col_indices = [idx for idx, number in enumerate(xer_col) if get_prefix_type(number) == prefix_type]
+  xee_col_indices = get_indices_of_same_type(xee_col, xer_col_indices, prefix_type)
+  percentage = sum(xee_col_indices) / sum(xer_col_indices) * 100
+  return percentage
+
+
+# Part A
 callee_col = get_column(calls, col_idx=1)
 unique_prefixes = get_unique([get_mobile_prefix(number) for number in callee_col])
 print("\n".join(sorted(unique_prefixes)))
+
+# Part B
+fixed_type_percentage = calc_same_type_percentage(record=calls, prefix_type=PrefixTypes.FIXED)
+print(f"{fixed_type_percentage:.2f} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")
+
 
 
 

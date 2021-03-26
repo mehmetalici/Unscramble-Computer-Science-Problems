@@ -52,7 +52,7 @@ def get_possible_telemarketers(candidate_numbers: list):
     candidates_remaining = candidate_numbers[:]
     for checklist in checklists:
         candidates_remaining = check_numbers(checklist, candidates_remaining) 
-    return candidates_remaining
+    return sorted(candidates_remaining)
 
 
 unique_callers = get_col_unique(calls, col_idx=0)

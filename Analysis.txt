@@ -31,6 +31,7 @@ and type-casting each element. Therefore, it's O(n).
 
 Task 3
 ----------
+PART A:
 - get_unique is O(n) (See Task 2).
 - get_column is O(n) (See Task 1).
 - get_prefix_type determines a number's prefix type that can be either fixed, mobile or telemarket.
@@ -54,6 +55,11 @@ Task 3
 -- All in all, Line 106 is O(n), Line 107 is O(n) and Line 108 is O(n log n) as it uses timsort
    in its backend [1]. Complete complexity is O(n logn).
 
+PART B:
+- get_indices_of_same_type is O(n) due to a forward pass.
+- calc_same_type_percentage is a sequence of O(n), O(n) and O(n) (Line 110-112)
+- percetange calculation is O(1)
+-- All in all it's O(n).
 
 
 Task 4

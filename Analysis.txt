@@ -20,13 +20,13 @@ All in all, the task scales linearly w.r.t the size of the records.
 
 Task 2
 ----------
-- get_column is O(n) (See Task 1).
-- get_argmax function converts the numbers from string to int by circulating the array
-and type-casting each element. Therefore, it's O(n).
-- We have another list comprehension (in line 35) which involves a forward pass and access, therefore, O(n).
-- print statement is array access, therefore, O(1).
+- add_to_dict is dictionary access, so O(1)
+- get_longest_time does a forward pass in calls, which is O(n). 
+  inner for loop is O(1). Then, in Line 37, max()'s complexity is O(n) as it does a single forward pass.
+  Line 38 is dict access which is O(1). 
 
--- All in all, it's O(n).
+-- Overall complexity is O(n).
+
 
 
 Task 3
@@ -45,20 +45,23 @@ PART A:
   a search for ")" which is O(n). Then, we have slice access which depends on the index of ")", which is O(k). 
   Therefore, the function's complexity is O(n).
 
-
+- get_numbers_called_from_area does one forward pass and checks with O(1) at each iteration. 
+  Therefore O(n).
+  
 - For functions get_prefix_type and get_mobile_prefix, the numbers can be assumed to be fixed in length. 
   Therefore, even though these functions are O(n) w.r.t number length, the number lengths almost
   never change in length. In every part of the world, it is 10-15 characters long.
   Therefore, the complexities of these functions reduce to O(1),
   considering the input of our problem, which is the rows of our records.
 
--- All in all, Line 106 is O(n), Line 107 is O(n) and Line 108 is O(n log n) as it uses timsort
+-- All in all, Line 145 is O(n), Line 146 is O(n) and Line 149 is O(n log n) as it uses timsort
    in its backend [1]. Complete complexity is O(n logn).
 
 PART B:
-- get_indices_of_same_type is O(n) due to a forward pass.
-- calc_same_type_percentage is a sequence of O(n), O(n) and O(n) (Line 110-112)
-- percetange calculation is O(1)
+- get_indices_of_same_area is O(n) due to a forward pass.
+
+- calc_same_area_percentage is a sequence of O(n), O(n) and O(n) (Line 134-136).
+  Percetange calculation is O(1)
 -- All in all it's O(n).
 
 

@@ -3,6 +3,8 @@ Read file into texts and calls.
 It's ok if you don't understand how to read files.
 """
 import csv
+from enum import Enum
+
 
 with open('texts.csv', 'r') as f:
     reader = csv.reader(f)
@@ -44,7 +46,16 @@ to other fixed lines in Bangalore."
 The percentage should have 2 decimal digits
 """
 
-TELEMARKET_PREFIX = 140
+TELEMARKET_PREFIX = "140"
+
+
+class AreaCodes:
+  BANGALORE = "080"
+  UNKNOWN = "XXX"
+
+  @classmethod
+  def get_as_list(cls):
+    return [cls.BANGALORE]
 
 
 class PrefixTypes:
@@ -53,7 +64,13 @@ class PrefixTypes:
   TELEMARKET = 2
 
 
+
 class UndefinedPrefixException(Exception):
+  def __init__(self, *args: object) -> None:
+      super().__init__(*args)
+
+
+class UndefinedAreaCodeException(UndefinedPrefixException):
   def __init__(self, *args: object) -> None:
       super().__init__(*args)
 
@@ -66,15 +83,21 @@ def get_column(record: list, col_idx: int):
   return [row[col_idx] for row in record]
 
 
-def get_prefix_type(number: str):
+def get_city_code(code: str):
+  for data in AreaCodes.get_as_list():
+    if data == code:
+      return data
+  return AreaCodes.UNKNOWN
 
+
+def get_prefix_type(number: str):
   if number[0] == '(' and ')' in number[1:]:
     return PrefixTypes.FIXED
 
   if ' ' in number and int(number[0]) in [7, 8, 9]:  
     return PrefixTypes.MOBILE
 
-  if int(number[:3]) == TELEMARKET_PREFIX:  
+  if number[:3] == TELEMARKET_PREFIX:  
     return PrefixTypes.TELEMARKET
 
   raise UndefinedPrefixException
@@ -102,25 +125,31 @@ def get_mobile_prefix(number: str):
   if type == PrefixTypes.TELEMARKET:
     return TELEMARKET_PREFIX  
 
-def get_indices_of_same_type(col: list, indices: list, prefix_type):
-  return [idx for idx in indices if get_prefix_type(col[idx]) == prefix_type]
+
+def get_indices_of_same_area(col: list, indices: list, area_code: AreaCodes):
+  return [idx for idx in indices if get_mobile_prefix(col[idx]) == area_code]
 
 
-def calc_same_type_percentage(record: list, prefix_type: PrefixTypes):
+def calc_same_area_percentage(record: list, area_code: AreaCodes):
   xer_col, xee_col = [get_column(record, col_idx=i) for i in range(2)]
-  xer_col_indices = [idx for idx, number in enumerate(xer_col) if get_prefix_type(number) == prefix_type]
-  xee_col_indices = get_indices_of_same_type(xee_col, xer_col_indices, prefix_type)
-  percentage = sum(xee_col_indices) / sum(xer_col_indices) * 100
+  xer_col_indices = [idx for idx, number in enumerate(xer_col) if get_mobile_prefix(number) == area_code]
+  xee_col_indices = get_indices_of_same_area(xee_col, xer_col_indices, area_code)
+  percentage = len(xee_col_indices) / len(xer_col_indices) * 100
   return percentage
+
+def get_numbers_called_from_area(area_code: AreaCodes, callers: list, callees: list):
+  return [callees[i] for i in range(len(callees)) if get_mobile_prefix(callers[i]) == area_code]
 
 
 # Part A
-callee_col = get_column(calls, col_idx=1)
-unique_prefixes = get_unique([get_mobile_prefix(number) for number in callee_col])
+callers, callees = [get_column(calls, col_idx=i) for i in range(2)]
+unique_prefixes = get_unique(get_numbers_called_from_area(area_code=AreaCodes.BANGALORE,
+                                                          callers=callers,
+                                                          callees=callees))
 print("\n".join(sorted(unique_prefixes)))
 
 # Part B
-fixed_type_percentage = calc_same_type_percentage(record=calls, prefix_type=PrefixTypes.FIXED)
+fixed_type_percentage = calc_same_area_percentage(record=calls, area_code=AreaCodes.BANGALORE)
 print(f"{fixed_type_percentage:.2f} percent of calls from fixed lines in Bangalore are calls to other fixed lines in Bangalore.")
 
 

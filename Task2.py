@@ -21,17 +21,24 @@ Print a message:
 September 2016.".
 """
 
-def get_column(record: list, col_idx: int):
-    return [row[col_idx] for row in record]
+def add_to_dict(d: dict, key: str, value: int):
+    try:
+        d[key] += value
+    except KeyError:
+        d[key] = value
 
-def get_argmax(col: List):
-    col = list(map(int, col))  
-    return col.index(max(col)) 
+def get_longest_time(calls: list):
+    durations = {}
+    for call in calls:
+        caller, callee, duration = call[0], call[1], call[3]
+        for number in [caller, callee]:
+            add_to_dict(durations, number, int(duration))
 
-caller_idx = 0
-duration_idx = 3
-duration_col = get_column(calls, duration_idx)
-longest_call_idx = get_argmax(duration_col)
-longest_call_row = [entry for entry in calls[longest_call_idx]]  
+    longest_duration_number = max(durations, key=lambda key: durations[key])
+    longest_duration = durations[longest_duration_number]
+    return (longest_duration_number, longest_duration)
 
-print(f"{longest_call_row[caller_idx]} spent the longest time, {longest_call_row[duration_idx]} seconds, on the phone during September 2016.")
+number, duration = get_longest_time(calls)
+print(f"{number} spent the longest time, {duration} seconds, on the phone during September 2016.")
+
+

@@ -21,17 +21,15 @@ Print a message:
 def get_column(record, col_idx):
     return [row[col_idx] for row in record]  
 
-def get_unique(col):
-    return set(col)  
 
 def get_unique_multi(records, col_incides):
-    all_numbers = []
+    all_numbers = set()
     for record in records:
         for col_idx in col_incides:
-            all_numbers += get_column(record, col_idx)
-    return get_unique(all_numbers)
+            all_numbers.update(get_column(record, col_idx))
+    return all_numbers
+
 
 records = (texts, calls)
 cols_with_nr = (0, 1)
-
 print(f"There are {len(get_unique_multi(records, cols_with_nr))} different telephone numbers in the records.")

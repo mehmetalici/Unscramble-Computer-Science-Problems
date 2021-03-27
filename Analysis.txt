@@ -67,13 +67,11 @@ PART B:
 
 Task 4
 ------------
-- get_unique is O(n) (See Task 1).
-- get_col_unique is a forward pass followed by get_unique, therefore, O(n).
-- check_numbers loops lumbers and checks for each number if it is in the given list. Therefore, O(n**2). 
-- get_possible_telemarketers is O(n**2) due to the check_numbers. In Lines 46-48, O(n). The rest are 
-  constant, i.e irrelevant for the input. 
+- get_possible_telemarketers adds numbers to sets with two subsequent for loops.
+  Addition to Set is O(1) for each element and O(n) for the whole array.
+  Moreover, the set substraction is O(n).   
 
-- All in all, the complexity is O(n**2), which is bad.
+- All in all, we have three O(n) subsequently, which makes the complexity O(n).
 
 
 

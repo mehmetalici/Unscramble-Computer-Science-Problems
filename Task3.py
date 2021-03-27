@@ -70,24 +70,12 @@ class UndefinedPrefixException(Exception):
       super().__init__(*args)
 
 
-class UndefinedAreaCodeException(UndefinedPrefixException):
-  def __init__(self, *args: object) -> None:
-      super().__init__(*args)
-
-
 def get_unique(arr: list):
   return set(arr)
 
 
 def get_column(record: list, col_idx: int):
   return [row[col_idx] for row in record]
-
-
-def get_city_code(code: str):
-  for data in AreaCodes.get_as_list():
-    if data == code:
-      return data
-  return AreaCodes.UNKNOWN
 
 
 def get_prefix_type(number: str):
@@ -143,9 +131,10 @@ def get_numbers_called_from_area(area_code: AreaCodes, callers: list, callees: l
 
 # Part A
 callers, callees = [get_column(calls, col_idx=i) for i in range(2)]
-unique_prefixes = get_unique(get_numbers_called_from_area(area_code=AreaCodes.BANGALORE,
-                                                          callers=callers,
-                                                          callees=callees))
+numbers = get_numbers_called_from_area(area_code=AreaCodes.BANGALORE,
+                                       callers=callers,
+                                       callees=callees)
+unique_prefixes = get_unique([get_mobile_prefix(number) for number in numbers])
 print("\n".join(sorted(unique_prefixes)))
 
 # Part B
